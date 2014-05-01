@@ -1,12 +1,22 @@
-$(function() {
-
-  $.get("sample0.tex", function(data) {
+function load(fname) {
+  $.get(fname, function(data) {
     $("#tex").text(data);
   });
+}
+
+function status(s) {
+  $("#status").text(s);
+}
+
+$(function() {
+
+  load("sample0.tex");
 
   $("#compile").click(function() {
     var pdftex = new PDFTeX();
     var latex_code = $("#tex").val(); 
+
+    status("Thinking...");
 
     // register images
     pdftex.FS_createPath('/', 'images', /*canRead=*/true, /*canWrite=*/true).then(function() {
@@ -27,6 +37,8 @@ $(function() {
             pdf.getPage(1).then(function getPageHelloWorld(page) {
               renderPage(page);
             });
+
+            status("");
           });
         });
       });

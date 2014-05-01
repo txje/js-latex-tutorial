@@ -1,0 +1,21 @@
+
+body {
+  font-family: courier;
+}
+
+.btn {
+  border: 0px;
+  border-radius: 10px;
+  font-size: 20px;
+  background-color: #333333;
+  color: #FFFFFF;
+  padding: 10px;
+  font-family: courier;
+  cursor: pointer;
+}
+
+.info {
+  color: #999999;
+  margin-left: 20px;
+  display: inline;
+}
