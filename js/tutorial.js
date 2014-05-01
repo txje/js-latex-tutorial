@@ -11,7 +11,7 @@ $(function() {
     // register images
     pdftex.FS_createPath('/', 'images', /*canRead=*/true, /*canWrite=*/true).then(function() {
 
-      pdftex.FS_createLazyFile('/images', 'fancy_figure.png', '/images/fancy_figure.png', /*canRead=*/true, /*canWrite=*/true).then(function() {
+      pdftex.FS_createLazyFile('/images', 'fancy_figure.png', window.location.pathname + 'images/fancy_figure.png', /*canRead=*/true, /*canWrite=*/true).then(function() {
 
         pdftex.compile(latex_code).then(function(pdf_dataurl) {
 
