@@ -47,13 +47,6 @@ $(function() {
 
 });
 
-function base64toUint8(b64) {
-  uint8 = new Uint8Array(atob(b64).split("").map(function(c) {
-    return c.charCodeAt(0);
-  }));
-  return uint8;
-}
-
 function renderPage(page) {
   var viewport = page.getViewport(1);
   var $canvas = $("<canvas></canvas>");
@@ -118,4 +111,11 @@ function renderPage(page) {
       textLayer.renderLayer();
       textLayer.endLayout();
   });
+}
+
+function base64toUint8(b64) {
+  uint8 = new Uint8Array(atob(b64).split("").map(function(c) {
+    return c.charCodeAt(0);
+  }));
+  return uint8;
 }
