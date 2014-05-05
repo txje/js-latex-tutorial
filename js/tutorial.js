@@ -10,7 +10,7 @@ function status(s) {
 
 $(function() {
 
-  load("sample0.tex");
+  load("overview.tex");
 
   $("#compile").click(function() {
     var pdftex = new PDFTeX();
@@ -34,9 +34,13 @@ $(function() {
 
           // Asynchronous download PDF as an ArrayBuffer
           PDFJS.getDocument(rawdata).then(function getPdfHelloWorld(pdf) {
-            pdf.getPage(1).then(function getPageHelloWorld(page) {
-              renderPage(page);
-            });
+            $("#pdf_container").empty();
+            console.log("pages:", pdf.numPages);
+            for(var i = 1; i <= pdf.numPages; i++) {
+              pdf.getPage(i).then(function getPageHelloWorld(page) {
+                renderPage(page);
+              });
+            }
 
             status("");
           });
@@ -68,11 +72,6 @@ function renderPage(page) {
       var cssScale = 'scale(' + (1 / outputScale.sx) + ', ' + (1 / outputScale.sy) + ')';
       CustomStyle.setProp('transform', canvas, cssScale);
       CustomStyle.setProp('transformOrigin', canvas, '0% 0%');
-
-      if ($textLayerDiv.get(0)) {
-          CustomStyle.setProp('transform', $textLayerDiv.get(0), cssScale);
-          CustomStyle.setProp('transformOrigin', $textLayerDiv.get(0), '0% 0%');
-      }
   }
 
   context._scaleX = outputScale.sx;
@@ -81,36 +80,12 @@ function renderPage(page) {
       context.scale(outputScale.sx, outputScale.sy);
   }
 
-  var canvasOffset = $canvas.offset();
-  var $textLayerDiv = $("<div />")
-      .addClass("textLayer")
-      .css("height", viewport.height + "px")
-      .css("width", viewport.width + "px")
-      .offset({
-          top: canvasOffset.top,
-          left: canvasOffset.left
-      });
+  var renderContext = {
+      canvasContext: context,
+      viewport: viewport
+  };
 
-  //Append the text-layer div to the DOM as a child of the PDF container div.
-  $pdfContainer.append($textLayerDiv);
-
-  page.getTextContent().then(function (textContent) {
-      var textLayer = new TextLayerBuilder($textLayerDiv.get(0));
-      textLayer.setTextContent({bidiTexts: textContent});
-
-      var renderContext = {
-          canvasContext: context,
-          viewport: viewport,
-          textLayer: textLayer
-      };
-
-      page.render(renderContext);
-
-      // actually do it
-      textLayer.beginLayout();
-      textLayer.renderLayer();
-      textLayer.endLayout();
-  });
+  page.render(renderContext);
 }
 
 function base64toUint8(b64) {
