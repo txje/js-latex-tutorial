@@ -66,20 +66,6 @@ function renderPage(page) {
   $pdfContainer.css("height", canvas.height + "px").css("width", canvas.width + "px");
   $pdfContainer.append($canvas);
 
-  //The following few lines of code set up scaling on the context if we are on a HiDPI display
-  var outputScale = getOutputScale();
-  if (outputScale.scaled) {
-      var cssScale = 'scale(' + (1 / outputScale.sx) + ', ' + (1 / outputScale.sy) + ')';
-      CustomStyle.setProp('transform', canvas, cssScale);
-      CustomStyle.setProp('transformOrigin', canvas, '0% 0%');
-  }
-
-  context._scaleX = outputScale.sx;
-  context._scaleY = outputScale.sy;
-  if (outputScale.scaled) {
-      context.scale(outputScale.sx, outputScale.sy);
-  }
-
   var renderContext = {
       canvasContext: context,
       viewport: viewport
